@@ -15,6 +15,7 @@ COPY . .
 # dist
 # *.log
 
-RUN npm i -g tsc && npm run build
+RUN npm i -g tsc 
+RUN npm run build
 
 CMD ["node", "dist/server.js"]
