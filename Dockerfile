@@ -15,7 +15,10 @@ COPY . .
 # dist
 # *.log
 
-RUN npm i -g tsc 
+RUN npm install -g typescript
+
+RUN tsc --version
+
 RUN npm run build
 ENV NODE_ENV=production
 CMD ["node", "dist/server.js"]
