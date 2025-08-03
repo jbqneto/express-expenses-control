@@ -17,5 +17,5 @@ COPY . .
 
 RUN npm i -g tsc 
 RUN npm run build
-
+ENV NODE_ENV=production
 CMD ["node", "dist/server.js"]
