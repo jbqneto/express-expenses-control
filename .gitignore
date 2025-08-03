@@ -1,0 +1,42 @@
+# Node modules
+node_modules/
+
+# Build
+dist/
+build/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# dotenv
+.env
+.env.*
+
+# local http testing
+*.http
+
+# Prisma
+prisma/dev.db
+prisma/*.sqlite
+prisma/migrations/
+
+# Uploads
+uploads/
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# OS-specific
+*.bak
+*.tmp
