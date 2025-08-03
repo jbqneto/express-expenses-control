@@ -1,24 +1,35 @@
-FROM node:22   
-
+# Etapa de build
+FROM node:18 AS builder
 WORKDIR /app
 
+# Copia apenas arquivos de dependências primeiro (para cache eficiente)
 COPY package*.json ./
+# Instala todas as dependências, incluindo devDependencies (não definimos NODE_ENV aqui)
 RUN npm install
 
-# Copy only source files, excluding node_modules and build artifacts
+# Copia o restante do código (inclui src/, tsconfig.json, etc.)
 COPY . .
 
-# Alternatively, for better caching and smaller images, you can use:
-# COPY . .
-# And add a .dockerignore file with:
-# node_modules
-# dist
-# *.log
-
+# (Opcional) Garante que o TypeScript esteja instalado - caso esteja no package.json, não é necessário
 RUN npm install -g typescript
 
-RUN tsc --version
-
+# Executa o build do projeto (compila TypeScript para JavaScript em dist/)
 RUN npm run build
+
+# Etapa final (imagem de produção)
+FROM node:22 AS production
+WORKDIR /app
+
+# Copia apenas as dependências de produção do estágio de build 
+COPY --from=builder /app/node_modules ./node_modules
+# Copia os artefatos compilados e arquivos necessários
+COPY --from=builder /app/dist ./dist
+
+# Se houver arquivos estáticos/public ou outros necessários, copie-os também:
+# COPY --from=builder /app/public ./public
+
+# Define variável de ambiente para produção
 ENV NODE_ENV=production
+
+# Define o comando de inicialização
 CMD ["node", "dist/server.js"]
